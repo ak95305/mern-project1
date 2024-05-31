@@ -48,6 +48,7 @@ function EditPlace() {
       isValid: true
     }
   }, false)
+  
 
   return (
     <App>
