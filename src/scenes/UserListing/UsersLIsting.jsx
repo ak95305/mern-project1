@@ -27,13 +27,13 @@ function UsersListing() {
 
   return (
     <>
-      <App>
+      {/* <App> */}
         <div className="users_listings">
           {users.map((item)=>{
             return <UsersItem key={item.id} user={item}/>
           })}
         </div>
-      </App>
+      {/* </App> */}
     </>
   )
 }

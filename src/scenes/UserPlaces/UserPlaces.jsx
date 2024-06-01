@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import App from '../../App'
 import "./usersPlaces.css"
 import PlaceItem from '../../components/Places/PlaceItem'
 import { useParams } from 'react-router-dom'
 
 function UserPlaces() {
+
   const allPlaces = [
     {
       id: 1,
@@ -37,13 +38,13 @@ function UserPlaces() {
   const places = allPlaces.filter(item => item.createdBy === parseInt(userId));
 
   return (
-    <App>
+    // <App>
         <div className="place_listings">
           {places.map(item=>{
             return <PlaceItem key={item.id} place={item} link={`/place/${item.id}`}/>
           })}
         </div>
-    </App>
+    // </App>
   )
 }
 

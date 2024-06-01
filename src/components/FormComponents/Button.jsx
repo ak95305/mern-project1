@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Button({ children, disabled }) {
+function Button({ children, disabled, type, className }) {
   return (
-    <button className='btn-primary' disabled={disabled}>{children}</button>
+    <button className={`btn btn-${type} ${className}`} disabled={disabled}>{children}</button>
   )
 }
 

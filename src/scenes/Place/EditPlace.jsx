@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react'
+import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import App from '../../App'
 import "./place.css"
 import Input from '../../components/FormComponents/Input'
@@ -35,45 +35,73 @@ const allPlaces = [
 ]
 
 function EditPlace() {
+  const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().id
-  const place = allPlaces.find(p=>p.id === parseInt(placeId))
-
-  const [formState, inputHandler] = useForm({
+  
+  const [formState, inputHandler, setFormData] = useForm({
     title: {
-      value: place.name,
-      isValid: true
+      value: '',
+      isValid: false
     },
     desc: {
-      value: place.desc,
-      isValid: true
+      value: '',
+      isValid: false
     }
   }, false)
   
+  const place = allPlaces.find(p=>p.id === parseInt(placeId))
 
+  useEffect(()=>{
+    if(place){
+      setFormData({
+        title: {
+          value: place.name,
+          isValid: true
+        },
+        desc: {
+          value: place.desc,
+          isValid: true
+        }
+      }, true)
+
+      setIsLoading(false);
+    }
+  }, [])
+  
+  if(formState.inputs.title.value === ""){
+    return (
+      <div className='create_place_form'>No Place Found</div>
+    )
+  }
+  
+  if(isLoading){
+    return (
+      <div className='create_place_form'>Loading...</div>
+    )
+  }
+  
   return (
-    <App>
-        <div className="create_place_form">
-          <form action="">
-            <Input 
-              id="title"
-              label="Title" 
-              validator={[VALIDATOR_REQUIRE()]}
-              onInput={inputHandler}
-              value={formState.inputs.title.value}
-              valid={formState.inputs.title.isValid}
-            />
-            <Input 
-              id="desc"
-              label="Description" 
-              validator={[VALIDATOR_MINLENGTH(4)]}
-              onInput={inputHandler}
-              value={formState.inputs.desc.value}
-              valid={formState.inputs.desc.isValid}
-            />
-            <Button className="btn-primary" disabled={!formState.isValid}>Submit</Button>
-          </form>
-        </div>
-    </App>
+    <div className="create_place_form">
+      <form action="">
+        <Input 
+          id="title"
+          label="Title" 
+          validator={[VALIDATOR_REQUIRE()]}
+          onInput={inputHandler}
+          value={formState.inputs.title.value}
+          valid={formState.inputs.title.isValid}
+        />
+        <Input 
+          id="desc"
+          label="Description" 
+          validator={[VALIDATOR_MINLENGTH(4)]}
+          onInput={inputHandler}
+          value={formState.inputs.desc.value}
+          valid={formState.inputs.desc.isValid}
+        />
+        <Button type="primary" disabled={!formState.isValid}>Submit</Button>
+      </form>
+    </div>
   )
 }
 

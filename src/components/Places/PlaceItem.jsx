@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './placeItem.css'
+import { AuthContext } from '../Utils/contexts/auth-context';
 
 function PlaceItem({ place, link }) {
+  const auth = useContext(AuthContext);
+
+  const handleDelete = () => {
+    if(confirm("Are you sure you want to delete?")){
+      console.log("DELETING...");
+    }
+  }
+
   return (
     <>
       <div className="card" style={{maxWidth: "1000px"}}>
@@ -9,7 +18,13 @@ function PlaceItem({ place, link }) {
         <div className="card-body">
           <h5 className="card-title">{ place.name }</h5>
           <p className="card-text">{ place.desc }</p>
-          <a href={link} className="btn btn-primary">Edit</a>
+          { auth.isLoggedIn && (
+          <>
+            <a href={link} className="btn btn-primary">Edit</a>
+            <button className="btn btn-danger ms-2" onClick={handleDelete}>Delete</button>
+          </>
+          )
+        }
         </div>
       </div>
     </>

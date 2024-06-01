@@ -25,25 +25,23 @@ function CreatePlace() {
   }
 
   return (
-    <App>
-        <div className="create_place_form">
-          <form action="" onSubmit={formSubmitHandler}>
-            <Input 
-              id="title"
-              label="Title" 
-              validator={[VALIDATOR_REQUIRE()]}
-              onInput={inputHandler}
-            />
-            <Input 
-              id="desc"
-              label="Description" 
-              validator={[VALIDATOR_MINLENGTH(4)]}
-              onInput={inputHandler}
-            />
-            <Button className="btn-primary" disabled={!formState.isValid}>Submit</Button>
-          </form>
-        </div>
-    </App>
+    <div className="create_place_form">
+      <form action="" onSubmit={formSubmitHandler}>
+        <Input 
+          id="title"
+          label="Title" 
+          validator={[VALIDATOR_REQUIRE()]}
+          onInput={inputHandler}
+        />
+        <Input 
+          id="desc"
+          label="Description" 
+          validator={[VALIDATOR_MINLENGTH(4)]}
+          onInput={inputHandler}
+        />
+        <Button className="btn-primary" disabled={!formState.isValid}>Submit</Button>
+      </form>
+    </div>
   )
 }
 
