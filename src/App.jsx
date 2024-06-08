@@ -3,17 +3,18 @@ import './App.css'
 import Header from './components/Header/Header'
 import MobileNav from './components/MobileNav/MobileNav'
 import { AuthContext } from './components/Utils/contexts/auth-context'
-import { BrowserRouter, Navigate, Route, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import UserPlaces from './scenes/UserPlaces/UserPlaces.jsx';
 import UsersListing from './scenes/UserListing/UsersLIsting.jsx';
 import CreatePlace from './scenes/Place/CreatePlace.jsx';
 import EditPlace from './scenes/Place/EditPlace.jsx';
 import Login from './scenes/Auth/Login.jsx';
+import Signup from './scenes/Auth/Signup.jsx'
 
 function App({children}) {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
-  const login = useCallback(() => {
+  const login = useCallback((formData) => {
     setIsLoggedIn(true);
   }, [])
 
@@ -38,6 +39,7 @@ function App({children}) {
     <Routes>
       <Route path="/" element={<UsersListing />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/users" element={<UsersListing />} />
       <Route path="/user/:id" element={<UserPlaces />} />
       <Route path="*" element={<Navigate to="/login" />} />

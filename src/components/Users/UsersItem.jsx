@@ -1,10 +1,11 @@
 import React from 'react'
 import './usersItem.css'
+import { Link } from 'react-router-dom'
 
 function UsersItem(props) {
   return (
     <>
-    <a href={`/user/${props.user.id}`}>
+    <Link to={`/user/${props.user.id}`}>
       <div className="user_item_card card mb-3" style={{maxWidth: "540px"}}>
         <div className="row g-0">
           <div className="col-md-4">
@@ -19,7 +20,7 @@ function UsersItem(props) {
           </div>
         </div>
       </div>
-    </a>
+    </Link>
     </>
   )
 }

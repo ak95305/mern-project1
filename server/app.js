@@ -4,8 +4,11 @@ const userRouter = require('./routes/users-routes')
 const bodyParser = require('body-parser')
 const HttpError = require('./models/http-error')
 const mongoose = require("mongoose")
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors())
 
 app.use(bodyParser.json())
 

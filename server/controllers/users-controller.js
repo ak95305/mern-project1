@@ -18,16 +18,16 @@ const signup = async (req, res, next) => {
 
     const rules = {
         email: 'required|email',
-        password: 'required',
+        password: 'required|min:1',
         name: 'required|min:3'
     }
 
     const validation = new Validator(data, rules)
-    
+
     if(validation.fails()){
         const errors = validation.errors
         res.status(400)
-        res.json({errors: errors})
+        res.json({...errors})
     }
 
     let user;
@@ -51,7 +51,7 @@ const signup = async (req, res, next) => {
     }
 
     res.status(200)
-    res.json({ user })
+    res.json({ user: user.toObject({ getters: true }) })
 }
 
 const login = async (req, res, next) => {
@@ -88,7 +88,7 @@ const login = async (req, res, next) => {
             await user.save()
 
             res.status(200)
-            res.json({ user })
+            res.json({ user: user.toObject({ getters: true }) })
         } else {
             const error = new HttpError("Password not correct", 400)
             return next(error)

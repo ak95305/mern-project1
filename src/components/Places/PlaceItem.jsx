@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import './placeItem.css'
 import { AuthContext } from '../Utils/contexts/auth-context';
+import { Link } from 'react-router-dom';
 
 function PlaceItem({ place, link }) {
   const auth = useContext(AuthContext);
@@ -20,7 +21,7 @@ function PlaceItem({ place, link }) {
           <p className="card-text">{ place.desc }</p>
           { auth.isLoggedIn && (
           <>
-            <a href={link} className="btn btn-primary">Edit</a>
+            <Link to={link} className="btn btn-primary">Edit</Link>
             <button className="btn btn-danger ms-2" onClick={handleDelete}>Delete</button>
           </>
           )
