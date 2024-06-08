@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import Header from './components/Header/Header'
 import MobileNav from './components/MobileNav/MobileNav'
@@ -10,18 +10,38 @@ import CreatePlace from './scenes/Place/CreatePlace.jsx';
 import EditPlace from './scenes/Place/EditPlace.jsx';
 import Login from './scenes/Auth/Login.jsx';
 import Signup from './scenes/Auth/Signup.jsx'
+import { CookiesProvider, useCookies } from 'react-cookie'
 
 function App({children}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [userToken, setUserToken] = useState(null);
+  const [cookie, setCookie, removeCookie] = useCookies(['user', 'user-token'])
   
   const login = useCallback((formData) => {
     setIsLoggedIn(true);
   }, [])
 
   const logout = useCallback(() => {
+    removeCookie('user')
+    removeCookie('user-token')
     setIsLoggedIn(false);
   }, [])
 
+  useEffect(()=>{
+    if(cookie.user){
+      setUser(cookie.user)
+    }
+
+    if(cookie['user-token']){
+      setUserToken(cookie['user-token'])
+    }
+
+    if(cookie.user && cookie['user-token']){
+      setIsLoggedIn(true)
+    }
+  }, [])
+  
   let routes;
   if(isLoggedIn){
     routes = (
@@ -40,23 +60,23 @@ function App({children}) {
       <Route path="/" element={<UsersListing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/users" element={<UsersListing />} />
-      <Route path="/user/:id" element={<UserPlaces />} />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
     )
   }
 
   return (
-    <AuthContext.Provider value={{isLoggedIn, login, logout}}>
-      <BrowserRouter>
-        <Header />
-        <MobileNav />
-        
-        {routes}
-        
-      </BrowserRouter>
-    </AuthContext.Provider>
+    <CookiesProvider>
+      <AuthContext.Provider value={{isLoggedIn, login, logout, user, userToken}}>
+        <BrowserRouter>
+          <Header />
+          <MobileNav />
+          
+          {routes}
+          
+        </BrowserRouter>
+      </AuthContext.Provider>
+    </CookiesProvider>
   )
 }
 
