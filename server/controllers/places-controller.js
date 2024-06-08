@@ -50,8 +50,7 @@ const createPlace = async (req, res, next) => {
 
     let rules = {
         name: 'required',
-        desc: 'required|min:5',
-        createdBy: 'required'
+        desc: 'required|min:5'
     }
 
     let validation = new Validator(data, rules)
@@ -64,7 +63,7 @@ const createPlace = async (req, res, next) => {
     let place = new Place({
         name: name,
         desc: desc,
-        createdBy: createdBy,
+        createdBy: req.userData.userId,
         image: "dummy_url"
     })
 
