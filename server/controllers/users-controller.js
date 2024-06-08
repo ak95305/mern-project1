@@ -83,7 +83,7 @@ const login = async (req, res, next) => {
             return next(error)
         }
         if(bcrypt.compareSync(password, user.password)){
-            user.token = jwt.sign({ userId: user.id, email: user.email }, "secret", { expiresIn: '1h', algorithm: 'HS256' });
+            user.token = jwt.sign({ userId: user.id, email: user.email }, "secret", { expiresIn: '1h' });
     
             await user.save()
 
@@ -108,9 +108,9 @@ const logout = async (req, res, next) => {
     }
 
     try{
-        const user = await User.findOne({ id: req.userData.id })
-        
+        const user = await User.findById(req.userData.userId)
         user.token = null
+        
         user.save()
         
     } catch (err) {

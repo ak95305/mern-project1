@@ -5,9 +5,11 @@ import Input from '../../components/FormComponents/Input'
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../components/Utils/validators'
 import Button from '../../components/FormComponents/Button'
 import { useForm } from '../../components/Utils/hooks/form-hook'
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 function CreatePlace() {
-  
+  const [cookie] = useCookies(['user', 'user-token']);
   const [formState, inputHandler] = useForm({
     title: {
       value: '',
@@ -21,7 +23,24 @@ function CreatePlace() {
   
   const formSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(formState);
+
+    let newPost = {
+      name: formState.inputs.title.value,
+      desc: formState.inputs.desc.value
+    };
+    
+    axios
+      .post("http://localhost:3000/api/places/", { ...newPost }, { 
+        headers: {
+          Authorization: `Bearer ${cookie["user-token"]}`
+        }
+      })
+      .then((resp)=>{
+        console.log(resp)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
   }
 
   return (

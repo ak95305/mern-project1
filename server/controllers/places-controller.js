@@ -40,12 +40,11 @@ const getPlaceByUserId = async (req, res, next) => {
 }
 
 const createPlace = async (req, res, next) => {
-    let { name, desc, createdBy } = req.body
+    let { name, desc } = req.body
     
     let data = {
         name: name,
-        desc: desc,
-        createdBy: createdBy
+        desc: desc
     }
 
     let rules = {
