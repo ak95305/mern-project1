@@ -14,7 +14,7 @@ function UsersItem(props) {
           <div className="col-md-8">
             <div className="card-body">
               <h5 className="card-title">{props.user.name}</h5>
-              <p className="card-text">{props.user.desc}</p>
+              <p className="card-text"><small>{props.user.email}</small></p>
               <p className="card-text">Places: <small className="text-body-secondary">{props.user.placesCount}</small></p>
             </div>
           </div>

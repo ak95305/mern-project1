@@ -122,7 +122,35 @@ const logout = async (req, res, next) => {
     res.json({ userData: req.userData })
 }
 
+const getUsers = async (req, res, next) => {
+    let { page, limit, search } = req.query
+    where = {}
+    if(typeof search != undefined){
+        where = {
+            name: { $regex: ".*" + search + ".*" }
+        }
+    }
+
+    let users = [];
+    try {
+        users = await User.find({ 
+            $or: [
+                {name: { $regex: ".*" + search + ".*", $options: 'i' }} 
+            ]
+        })
+        .limit(typeof limit != undefined ? limit : null)
+        .skip(typeof page != undefined ? (page-1)*limit : null)
+    } catch(err) {
+        const error = new HttpError('Unable to fetch Users', 400)
+        return next(error)
+    }
+
+    res.status(200)
+    res.json({ users: users.map( item => item.toObject({ getters: true }) ) })
+}
+
 
 exports.signup = signup
 exports.login = login   
-exports.logout = logout   
+exports.logout = logout 
+exports.getUsers = getUsers 

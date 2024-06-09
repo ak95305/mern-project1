@@ -19,7 +19,7 @@ function App({ children }) {
   const [userToken, setUserToken] = useState(null);
   const [cookie, setCookie, removeCookie] = useCookies(["user", "user-token"]);
 
-  const login = useCallback((formData) => {
+  const login = useCallback(() => {
     setIsLoggedIn(true);
   }, []);
 
@@ -72,7 +72,6 @@ function App({ children }) {
   } else {
     routes = (
       <Routes>
-        <Route path="/" element={<UsersListing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<Navigate to="/login" />} />
