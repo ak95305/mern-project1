@@ -51,8 +51,10 @@ const Login = () => {
         setFormError([])
         setSuccess(true)
         let user = res.data.user;
-        setCookie('user', user)
-        setCookie('user-token', user.token)
+        const expireDate = new Date();
+        expireDate.setHours(expireDate.getHours() + 1);
+        setCookie('user', user, { expires: expireDate })
+        setCookie('user-token', user.token, {expires: expireDate})
         auth.login()
       })
       .catch((err) => {

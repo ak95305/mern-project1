@@ -124,29 +124,67 @@ const logout = async (req, res, next) => {
 
 const getUsers = async (req, res, next) => {
     let { page, limit, search } = req.query
-    where = {}
-    if(typeof search != undefined){
-        where = {
-            name: { $regex: ".*" + search + ".*" }
-        }
-    }
+    page = parseInt(page)
+    limit = parseInt(limit)
 
     let users = [];
     try {
-        users = await User.find({ 
-            $or: [
-                {name: { $regex: ".*" + search + ".*", $options: 'i' }} 
-            ]
-        })
-        .limit(typeof limit != undefined ? limit : null)
-        .skip(typeof page != undefined ? (page-1)*limit : null)
+        // users = await User.find({ 
+        //     $or: [
+        //         {name: { $regex: ".*" + search + ".*", $options: 'i' }},
+        //         {email: { $regex: ".*" + search + ".*", $options: 'i' }}
+        //     ]
+        // })
+        // .limit(typeof limit != undefined ? limit : null)
+        // .skip(typeof page != undefined ? (page-1)*limit : null)
+
+        users = await User.aggregate([
+            {
+                $lookup: {
+                    from: 'places',
+                    localField: '_id',
+                    foreignField: 'createdBy'
+                }
+            },
+            {
+                $project: {
+                    name: 1,
+                    email: 1,
+                    id: 1
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        {name: { $regex: ".*" + search + ".*", $options: 'i' }},
+                        {email: { $regex: ".*" + search + ".*", $options: 'i' }}
+                    ]
+                }
+            },
+            {
+                $addFields: {
+                    id: "$_id"
+                }
+            },
+            {
+                $skip: (page-1)*limit
+            },
+            {
+                $limit: limit
+            }
+        ])
+        // res.json({users})
+        // return next()
+
     } catch(err) {
+        console.log(err)
         const error = new HttpError('Unable to fetch Users', 400)
         return next(error)
     }
 
     res.status(200)
-    res.json({ users: users.map( item => item.toObject({ getters: true }) ) })
+    // res.json({ users: users.map( item => item.toObject({ getters: true }) ) })
+    res.json({ users })
 }
 
 
